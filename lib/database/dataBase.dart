@@ -25,12 +25,17 @@ class Data with ChangeNotifier {
         custaddress: 'PO CROSS LINE 12'),
   ];
 
-  final List<Invoice> invoices = [
-    // Invoice(
-    //   invno: 1,
-    //   invdate: DateTime.now(),
-    //   customer: null,
-    //   totalamount: 12000,
-    //   itemlist: [Product(itemid: itemid, itemname: itemname, itemprice: itemprice, openingqty: openingqty)])
+  List<Invoice>_invoice=[
+    Invoice(
+      invno: 1, 
+      invdate:DateTime.now() , 
+      customer: Customer(custid: 1,custname:'Alex Jones',openingbal: 120000,custaddress:'PO BOX 804' ), 
+      totalamount: 120000, 
+      itemlist:[
+        ItemData(product:Product(itemid: 1, itemname: 'Lenovo Laptop', itemprice: 40000, openingqty: 10),itemqty: 3,itemprice: 40000,lineamt: 120000), 
+      ]),
   ];
+ List<Invoice> get invoice{
+     return [..._invoice];
+ }
 }

@@ -1,20 +1,45 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:invoice_lite_flutterv1/database/dataBase.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 //import 'package:dropdown_formfield/dropdown_formfield.dart';
 
 class CustomerEntry extends StatefulWidget {
+  final Function selectDate;
+  final Function invoice;
+  final Function custName;
+  CustomerEntry(this.selectDate,this.invoice,this.custName);
   @override
   _CustomerEntryState createState() => _CustomerEntryState();
 }
 
 class _CustomerEntryState extends State<CustomerEntry> {
   //final List<String> subjects = ['hy', 'hi', 'yu'];
-  final formKey = GlobalKey<FormState>();
   String selectedObject = 'Alex Jones';
+  DateTime _selectedDate;
+  final invoiceController = TextEditingController();
+  
+
+  void dateSelector(){
+     showDatePicker(
+      context: context, 
+      initialDate: DateTime.now(), 
+      firstDate: DateTime(2019), 
+      lastDate: DateTime.now()).then((value) {
+        setState(() {
+          _selectedDate = value;
+          widget.selectDate(value);
+        }); 
+      });
+  }
+
   @override
   Widget build(BuildContext context) {
-    print(selectedObject);
+    // print(selectedObject);
+    // print(_selectedDate);
+
     final customer = Provider.of<Data>(context).customers;
     final custname = customer.map((e) => e.custname).toList();
     final index =
@@ -23,8 +48,7 @@ class _CustomerEntryState extends State<CustomerEntry> {
     final media = MediaQuery.of(context).size;
     return Container(
       width: media.width,
-      child: Form(
-        key: formKey,
+     
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           //mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -37,27 +61,31 @@ class _CustomerEntryState extends State<CustomerEntry> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  //------------------------------------Date Section-----------------------------------
+//------------------------------------Date Section-----------------------------------
                   Row(
                     children: [
                       Text('Date :  '),
-                      Container(
-                        width: 100,
-                        height: 40,
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(15),
-                              ),
-                            ),
+                      InkWell(
+                        onTap: dateSelector,
+                        child: Container(
+                          width: 100,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            border: Border.all(width: 1,color: Colors.grey),
+                            borderRadius:BorderRadius.circular(15), 
                           ),
+                          child: Center(child: Text(_selectedDate==null ?'Select': DateFormat.yMd().format(_selectedDate),
+                          style: TextStyle(
+                            fontWeight:_selectedDate==null?FontWeight.normal: FontWeight.bold,
+                            fontSize:_selectedDate==null?15: 18
+                          ),),
                         ),
+                      ),
                       ),
                     ],
                   ),
 
-                  //-----------------------------------Invoice Section-------------------------------
+//-----------------------------------Invoice Section-------------------------------
 
                   Row(
                     children: [
@@ -65,14 +93,31 @@ class _CustomerEntryState extends State<CustomerEntry> {
                       Container(
                         width: 100,
                         height: 40,
-                        child: TextField(
+                        child: TextFormField(
+                          validator: (value){
+                            if(value.isEmpty){
+                              return 'Enter invoice number';
+                            }
+                            else{
+                              return null;
+                            }
+                          },
+                          controller: invoiceController,
+                          onSaved: (value){
+                            setState(() {
+                              widget.invoice(value);
+                            });
+                          },
+                          style: TextStyle(fontWeight: FontWeight.bold),
                           decoration: InputDecoration(
+                            contentPadding: EdgeInsets.fromLTRB(10.0, 4.0, 10.0, 3.0),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.all(
                                 Radius.circular(15),
                               ),
                             ),
                           ),
+                          keyboardType: TextInputType.number,
                         ),
                       ),
                     ],
@@ -84,7 +129,7 @@ class _CustomerEntryState extends State<CustomerEntry> {
               height: 20,
             ),
 
-            //---------------------------------------CustomerName section-----------------------------------------
+//---------------------------------------CustomerName section-----------------------------------------
             Container(
               width: media.width,
               child: Row(
@@ -92,15 +137,19 @@ class _CustomerEntryState extends State<CustomerEntry> {
                   Text('Customer :  '),
                   Container(
                     width: 150,
-                    height: 60,
+                    height: 45,
                     //padding: EdgeInsets.only(left: 16, right: 16),
                     // decoration: BoxDecoration(
                     //     border: Border.all(color: Colors.grey, width: 1),
                     //     borderRadius: BorderRadius.circular(15)),
                     child: FormField<String>(
+                      onSaved: (value){
+                        widget.custName(value);
+                      },
                       builder: (FormFieldState<String> state) {
                         return InputDecorator(
                           decoration: InputDecoration(
+                            contentPadding: EdgeInsets.fromLTRB(8.0, 4.0, 5.0, 3.0),
                             //labelStyle: textStyle,
                             // errorStyle: TextStyle(
                             //     color: Colors.redAccent, fontSize: 16.0),
@@ -111,13 +160,16 @@ class _CustomerEntryState extends State<CustomerEntry> {
                             ),
                           ),
                           isEmpty: selectedObject == '',
-                          child: DropdownButtonHideUnderline(
-                            child: DropdownButton<String>(
+                          child: 
+                          DropdownButtonHideUnderline(
+                            child: 
+                            DropdownButton<String>(
                               value: selectedObject,
                               isDense: true,
                               onChanged: (String newValue) {
                                 setState(() {
                                   selectedObject = newValue;
+                                  
                                   state.didChange(newValue);
                                 });
                               },
@@ -126,7 +178,7 @@ class _CustomerEntryState extends State<CustomerEntry> {
                                     value: value,
                                     child: Text(
                                       value,
-                                    ));
+                                    ),);
                               }).toList(),
                             ),
                           ),
@@ -141,7 +193,7 @@ class _CustomerEntryState extends State<CustomerEntry> {
               height: 20,
             ),
 
-            //------------------------------------Customer Address section---------------------------------------------
+//------------------------------------Customer Address section---------------------------------------------
             Text('Customer Address'),
 
             Container(
@@ -161,7 +213,6 @@ class _CustomerEntryState extends State<CustomerEntry> {
             ),
           ],
         ),
-      ),
     );
   }
 }
