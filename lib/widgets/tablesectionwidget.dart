@@ -1,53 +1,54 @@
 import 'package:flutter/material.dart';
 import 'package:invoice_lite_flutterv1/models/invoice.dart';
+import 'package:provider/provider.dart';
 import 'addlinerow.dart';
-//import 'product.dart';
+import '../models/item.dart';
 
 class TableSection extends StatefulWidget {
+  final Function total;
+  TableSection(this.total);
   @override
   _TableSectionState createState() => _TableSectionState();
 }
 
 class _TableSectionState extends State<TableSection> {
-  String qty;
-  String itemName;
  
-  String price;
-  String amount;
-  String qtyCount(qtycnt){
-    qty = qtycnt;
+  int qty;
+  String itemName;
+  double price;
+  double amount;
+  int qtyCount(qtycnt){
+    return qty = qtycnt;
 }
 String _itemname(itmname){
-   itemName=itmname;
+   return itemName=itmname;
 }
 
-String priceitem(value){
-  price=value;
+double priceitem(value){
+  return price=value;
 }
-String _amount(value){
-  amount=value;
+double _amount(value){
+  return amount=value;
 }
-   String tamt;
   int count = 1;
   var sum = 0.0;
+  var _total =0.0;
   void _addrow() {
     setState(() {
       count = count + 1;
     });
   }
 
-  void totalAmount(double total) {  
-      sum = sum + total;   
-  }
- final listItem=[
-   ItemData(product:null,itemqty: 3,itemprice: 40000,lineamt: 120000), 
- ];
-  void itemData(){
-    final newList=ItemData(product: null, itemqty: int.parse(qty), 
-    itemprice: double.parse(price), lineamt: double.parse(amount));
-    setState(() {
-      listItem.add(newList);
+  // void totalAmount(double total) {  
+  //     sum = sum + total;   
+  // }
+  double get _totalAmount{
+    double _total =0.0;
+    final list =Provider.of<Item>(context).items;
+    list.forEach((element) { 
+      _total=_total+element.lineamt;
     });
+    return _total;
   }
   
   Widget container(String text, double wth) {
@@ -63,7 +64,14 @@ String _amount(value){
 
   @override
   Widget build(BuildContext context) {
-    final tamountController=TextEditingController(text: '$sum');
+
+    //final sumtotal=Provider.of<Item>(context).totalAmt;
+    
+    
+    final tamountController=TextEditingController(
+       text: '$_totalAmount'
+     // text: '$sumtotal'
+      );
     return Container(
       width: MediaQuery.of(context).size.width,
       child: Column(
@@ -95,12 +103,12 @@ String _amount(value){
             child: ListView.builder(
                 itemCount: count,
                 itemBuilder: (ctx, i) => AddLineRow(
-                  totalAmount,
+                  //totalAmount,
                   _itemname,
                   qtyCount,
                   priceitem,
                   _amount,
-                  )),
+                  ),),
           ),
           SizedBox(
             height: 10,
@@ -115,6 +123,9 @@ String _amount(value){
                 width: 150,
                 height: 40,
                 child: TextFormField(
+                  onSaved: (_){
+                    widget.total(_total);
+                  },
                   controller: tamountController,
                   enabled: false,
                   style: TextStyle(fontWeight: FontWeight.bold),
