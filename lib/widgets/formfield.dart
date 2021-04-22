@@ -33,6 +33,10 @@ class FormFieldArea extends StatelessWidget {
                       borderSide: BorderSide(width: 3, color: Colors.red),
                       borderRadius: BorderRadius.circular(15),
                     ),
+                    focusedErrorBorder: OutlineInputBorder(
+                      borderSide: BorderSide(width: 3, color: Colors.red),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
                   ),
                   keyboardType: value,
                 ),
