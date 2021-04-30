@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:invoice_lite_flutterv1/database/dataBase.dart';
 import 'package:invoice_lite_flutterv1/models/invoice.dart';
+import 'package:invoice_lite_flutterv1/screens/customerScreen.dart';
+import 'package:invoice_lite_flutterv1/screens/addInvoiceScreen.dart';
+import 'package:invoice_lite_flutterv1/screens/invoicescreen.dart';
+import 'package:invoice_lite_flutterv1/screens/productScreen.dart';
 import 'package:provider/provider.dart';
-import './screens/invoicescreen.dart';
 import './models/item.dart';
-import './screens/customerScreen.dart';
-import './screens/productScreen.dart';
+import 'screens/addCustomerScreen.dart';
+import 'screens/addProductScreen.dart';
 
 void main() {
   runApp(MyApp());
@@ -21,26 +24,24 @@ class MyApp extends StatelessWidget {
           value: Data(),
         ),
         ChangeNotifierProvider.value(
-          value:Item(), 
+          value: Item(),
         ),
-        ChangeNotifierProvider.value(
-          value: InvoiceItem()
-          )
+        ChangeNotifierProvider.value(value: InvoiceItem())
       ],
       child: MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home: InvoiceScreen(),
-        routes:{
-         InvoiceScreen.routeName:(ctx)=>InvoiceScreen(),
-         ProductScreen.routeName:(ctx)=>ProductScreen(),
-         CustomerScreen.routeName:(ctx)=>CustomerScreen(),
-        }
-         
-        
-      ),
+          title: 'Flutter Demo',
+          theme: ThemeData(
+            primarySwatch: Colors.deepPurple,
+          ),
+          home: InvoiceScreen(),
+          routes: {
+            InvoiceScreen.routeName: (ctx) => InvoiceScreen(),
+            InvoiceEntry.routeName: (ctx) => InvoiceEntry(),
+            ProductScreen.routeName: (ctx) => ProductScreen(),
+            CustomerScreen.routeName: (ctx) => CustomerScreen(),
+            AddProductScreen.routeName: (ctx) => AddProductScreen(),
+            AddCustomerScreen.routeName: (ctx) => AddCustomerScreen(),
+          }),
     );
   }
 }

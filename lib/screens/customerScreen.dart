@@ -1,132 +1,80 @@
 import 'package:flutter/material.dart';
 import 'package:invoice_lite_flutterv1/database/dataBase.dart';
-import 'package:invoice_lite_flutterv1/widgets/formfield.dart';
+import 'package:invoice_lite_flutterv1/screens/addCustomerScreen.dart';
 import 'package:provider/provider.dart';
-import 'invoicescreen.dart';
 
 class CustomerScreen extends StatelessWidget {
   static const routeName = '/customer';
-  final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    int _id;
-    String _name;
-    double _bal;
-    String _address;
-     final itemid = Provider.of<Data>(context).customers.map((e) => e.custid).toList();
+    final customerList =
+        Provider.of<Data>(context).customers.map((e) => e).toList();
+    final style = TextStyle(fontSize: 15, fontWeight: FontWeight.bold);
     return Scaffold(
       appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.white10,
-        title: Padding(
-          padding: const EdgeInsets.only(left: 60),
-          child: Text(
-            'Customer Entry',
-            style: TextStyle(
-                color: Colors.black, fontWeight: FontWeight.bold, fontSize: 23),
-          ),
+        title: Text(
+          'Our Customers',
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_ios_rounded,
-            color: Colors.black,
-          ),
-          onPressed: () {
-            Navigator.of(context).pushNamed(InvoiceScreen.routeName);
-          },
-        ),
+        actions: [
+          IconButton(
+              icon: Icon(Icons.person_add),
+              onPressed: () {
+                Navigator.of(context)
+                    .pushReplacementNamed(AddCustomerScreen.routeName);
+              }),
+        ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Form(
-          key: formKey,
-          child: SingleChildScrollView(
+      body: ListView.builder(
+        itemCount: customerList.length,
+        itemBuilder: (ctx, index) => Card(
+          elevation: 10,
+          margin: EdgeInsets.symmetric(vertical: 6, horizontal: 15),
+          child: Container(
+            padding: const EdgeInsets.all(15),
+            margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 0),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Add your customer details here',
-                  style: TextStyle(
-                    fontSize: 15,
-                  ),
-                ),
-                FormFieldArea(
-                    'Enter Customer Id', 'Customer Id', TextInputType.number, 1,
-                    (value) {
-                  if (value.isEmpty) {
-                    return 'Enter an Id';
-                  }else if (itemid.contains(int.parse(value))){
-                    return 'This Id is already existed';
-                  }
-                }, (data) {
-                  _id = int.parse(data);
-                }),
-                FormFieldArea('Enter Customer Name', 'Customer Name',
-                    TextInputType.text, 1, (value) {
-                  if (value.isEmpty) {
-                    return 'Enter a Name';
-                  } else if (value.length <= 3) {
-                    return 'Enter correct name';
-                  }
-                }, (data) {
-                  _name = data;
-                }),
-                FormFieldArea(
-                    'Enter Opening Balance',
-                    'Customer Opening Balance',
-                    TextInputType.number,
-                    1, (value) {
-                  if (value.isEmpty) {
-                    return 'Enter opening Balance';
-                  }
-                }, (data) {
-                  _bal = double.parse(data);
-                }),
-                FormFieldArea('Enter Customer Address', 'Customer Address',
-                    TextInputType.multiline, 2, (value) {
-                  if (value.isEmpty) {
-                    return 'Enter an address';
-                  }
-                }, (data) {
-                  _address = data;
-                }),
-                SizedBox(height: 20),
-                InkWell(
-                  onTap: () {
-                    final valid = formKey.currentState.validate();
-                    formKey.currentState.save();
-                    if (valid) {
-                      Provider.of<Data>(context,listen: false).addCustomer(
-                        _id,
-                        _name,
-                        _bal,
-                        _address,
-                      );
-                      Navigator.of(context)
-                       .pushReplacementNamed(InvoiceScreen.routeName);
-                    } 
-                  },
-                  child: Container(
-                      width: MediaQuery.of(context).size.width * .7,
-                      height: 50,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: Theme.of(context).primaryColor,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black,
-                              blurRadius: 1.0,
-                              spreadRadius: 0.0,
-                              offset: Offset(1.0, 1.0),
-                            )
-                          ]),
-                      child: Center(
-                          child: Text(
-                        'Add Customer',
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Center(
+                      child: Text(
+                        customerList[index].custname,
                         style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
-                      ))),
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      icon: Icon(
+                        Icons.delete_outlined,
+                        color: Theme.of(context).errorColor,
+                      ),
+                      onPressed: () {
+                        Provider.of<Data>(context, listen: false)
+                            .romoveCustomer(customerList[index].custid);
+                      },
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+                Text(
+                  'Customer ID         : ${customerList[index].custid}',
+                  style: style,
+                ),
+                Text(
+                  'Address                 : ${customerList[index].custaddress}',
+                  style: style,
+                ),
+                Text(
+                  'Opening Balance : ${customerList[index].openingbal.toStringAsFixed(2)}',
+                  style: style,
                 )
               ],
             ),
