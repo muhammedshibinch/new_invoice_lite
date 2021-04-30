@@ -11,10 +11,11 @@ class Data with ChangeNotifier {
         itemid: 3, itemname: 'Samsung Note7', itemprice: 28000, openingqty: 18),
   ];
 
-  List<Product> get products{
+  List<Product> get products {
     return [..._products];
   }
-  void addProduct(int id,String name,double price,int qty){
+
+  void addProduct(int id, String name, double price, int qty) {
     final newProduct = Product(
       itemid: id,
       itemname: name,
@@ -22,6 +23,11 @@ class Data with ChangeNotifier {
       openingqty: qty,
     );
     _products.add(newProduct);
+  }
+
+  void removeProduct(int id) {
+    _products.removeWhere((tx) => tx.itemid == id);
+    notifyListeners();
   }
 
   final List<Customer> _customers = [
@@ -36,18 +42,25 @@ class Data with ChangeNotifier {
         openingbal: 150000,
         custaddress: 'PO CROSS LINE 12'),
   ];
-   
- List<Customer> get customers{
-   return [..._customers];
- }
-void addCustomer(int id,String name,double bal,String address){
-  final newCust=Customer(
-    custid: id,
-    custname: name,
-    openingbal: bal,
-    custaddress: address,
-  );
-  _customers.add(newCust);
-}
-notifyListeners();
+
+  List<Customer> get customers {
+    return [..._customers];
+  }
+
+  void addCustomer(int id, String name, double bal, String address) {
+    final newCust = Customer(
+      custid: id,
+      custname: name,
+      openingbal: bal,
+      custaddress: address,
+    );
+    _customers.add(newCust);
+  }
+
+  void romoveCustomer(int id) {
+    _customers.removeWhere((element) => element.custid == id);
+    notifyListeners();
+  }
+
+  notifyListeners();
 }
