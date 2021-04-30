@@ -22,7 +22,6 @@ class _NewLineState extends State<NewLine> {
 
   static const defaultQtycount = 0;
   double price = 0;
-//static const defaultPriceamount = 1.0;
 
   final _qtyController =
       TextEditingController(text: defaultQtycount.toString());
