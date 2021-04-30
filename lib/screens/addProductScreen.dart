@@ -20,14 +20,12 @@ class AddProductScreen extends StatelessWidget {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.white10,
-        title: Padding(
-          padding: EdgeInsets.only(left: 60),
-          child: Text(
-            'Product Entry',
-            style: TextStyle(
-                color: Colors.black, fontWeight: FontWeight.bold, fontSize: 23),
-          ),
+        title: Text(
+          'Product Entry',
+          style: TextStyle(
+              color: Colors.black, fontWeight: FontWeight.bold, fontSize: 23),
         ),
+        centerTitle: true,
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back_ios_rounded,

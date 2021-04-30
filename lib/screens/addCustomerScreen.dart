@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:invoice_lite_flutterv1/database/dataBase.dart';
 import 'package:invoice_lite_flutterv1/screens/customerScreen.dart';
-import 'package:invoice_lite_flutterv1/screens/addInvoiceScreen.dart';
 import 'package:invoice_lite_flutterv1/widgets/formfield.dart';
 import 'package:invoice_lite_flutterv1/widgets/saveButton.dart';
 import 'package:provider/provider.dart';
@@ -21,14 +20,12 @@ class AddCustomerScreen extends StatelessWidget {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.white10,
-        title: Padding(
-          padding: const EdgeInsets.only(left: 60),
-          child: Text(
-            'Customer Entry',
-            style: TextStyle(
-                color: Colors.black, fontWeight: FontWeight.bold, fontSize: 23),
-          ),
+        title: Text(
+          'Customer Entry',
+          style: TextStyle(
+              color: Colors.black, fontWeight: FontWeight.bold, fontSize: 23),
         ),
+        centerTitle: true,
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back_ios_rounded,
