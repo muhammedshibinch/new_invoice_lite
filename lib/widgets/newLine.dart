@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:invoice_lite_flutterv1/database/dataBase.dart';
+import 'package:invoice_lite_flutterv1/models/item.dart';
 import 'package:invoice_lite_flutterv1/models/product.dart';
 import 'package:provider/provider.dart';
 
@@ -10,9 +11,16 @@ class NewLine extends StatefulWidget {
   final Function qtycount;
   final Function price;
   final Function amount;
+  final List<ItemData> tableitem;
 
   NewLine(
-      this.giveTotal, this.itemname, this.qtycount, this.price, this.amount);
+      this.giveTotal, 
+      this.itemname, 
+      this.qtycount, 
+      this.price, 
+      this.amount,
+      this.tableitem
+      );
 
   _NewLineState createState() => _NewLineState();
 }
@@ -83,7 +91,19 @@ class _NewLineState extends State<NewLine> {
   // }
 
   //final qtyCountroller = TextEditingController();
-
+  // @override
+  // void didChangeDependencies() {
+    
+  //    final property = ItemData(
+  //  product: Product(itemid: 3,itemname: 'sdgsdh',itemprice: 354354,openingqty: 242), 
+  //  itemqty: quantity, 
+  //  itemprice: itemprice, 
+  //  lineamt: totalprice
+  //  );
+  //  widget.tableitem.add(property);
+  //   super.didChangeDependencies();
+  // }
+ 
   @override
   Widget build(BuildContext context) {
     // if(getTotalAmount()!=0||price != null){
@@ -91,6 +111,7 @@ class _NewLineState extends State<NewLine> {
     // }else{
     //     print(0.0);
     // }
+  
 
     final amountcontroller =
         TextEditingController(text: getTotalAmount().toString());
@@ -223,7 +244,9 @@ class _NewLineState extends State<NewLine> {
               });
             },
             onSaved: (_) {
-              widget.amount(totalprice);
+              setState(() {
+                widget.amount(totalprice);
+              });
             },
           ),
         ),

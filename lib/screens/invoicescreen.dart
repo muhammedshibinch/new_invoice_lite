@@ -17,7 +17,11 @@ class InvoiceScreen extends StatelessWidget {
         child: CustomDrawer(),
       ),
       appBar: AppBar(
+        
         title: Text('Invoices'),
+        centerTitle:true,
+        shape: RoundedRectangleBorder(
+          borderRadius:BorderRadius.vertical(bottom: Radius.circular(10))),
         actions: [
           IconButton(
               icon: Icon(Icons.note_add_outlined),

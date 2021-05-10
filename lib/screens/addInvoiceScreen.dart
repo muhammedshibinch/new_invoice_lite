@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:invoice_lite_flutterv1/models/invoice.dart';
 import 'package:invoice_lite_flutterv1/models/customer.dart';
+import 'package:invoice_lite_flutterv1/models/item.dart';
 import 'package:invoice_lite_flutterv1/screens/invoicescreen.dart';
 import 'package:invoice_lite_flutterv1/widgets/tablePart.dart';
 import 'package:provider/provider.dart';
@@ -15,6 +16,7 @@ class InvoiceEntry extends StatefulWidget {
 }
 
 class _MainScreenState extends State<InvoiceEntry> {
+  final List<ItemData> tableitem = [];
   final formKey = GlobalKey<FormState>();
   int invoiceNum;
   //DateTime _selectedDate;
@@ -306,8 +308,9 @@ class _MainScreenState extends State<InvoiceEntry> {
                         ],
                       ),
                     ),
-
-                    TableSection(_total),
+//----------------------------------------------------------------------------
+                    TableSection(_total,tableitem),
+//-----------------------------------------------------------------------------
 
                     SizedBox(width: 20),
                     Container(
@@ -344,6 +347,7 @@ class _MainScreenState extends State<InvoiceEntry> {
                     Center(
                       child: ElevatedButton.icon(
                           onPressed: () {
+                            print(tableitem.map((e) => e.itemqty).toList());
                             final isValid = formKey.currentState.validate();
                             if (isValid) {
                               formKey.currentState.save();
@@ -360,7 +364,7 @@ class _MainScreenState extends State<InvoiceEntry> {
                                       invoiceNum,
                                       _dateSelected,
                                       customers,
-                                      double.parse(totalController.text), []);
+                                      double.parse(totalController.text), tableitem.toList());
                             }
                             Navigator.of(context)
                                 .pushReplacementNamed(InvoiceScreen.routeName);

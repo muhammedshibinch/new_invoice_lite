@@ -18,6 +18,7 @@ class AddCustomerScreen extends StatelessWidget {
         Provider.of<Data>(context).customers.map((e) => e.custid).toList();
     return Scaffold(
       appBar: AppBar(
+        
         elevation: 0,
         backgroundColor: Colors.white10,
         title: Text(

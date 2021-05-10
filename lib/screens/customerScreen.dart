@@ -16,6 +16,7 @@ class CustomerScreen extends StatelessWidget {
           'Our Customers',
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
+        centerTitle: true,
         actions: [
           IconButton(
               icon: Icon(Icons.person_add),

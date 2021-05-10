@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:invoice_lite_flutterv1/models/item.dart';
 
 import 'newLine.dart';
 
 class TableSection extends StatefulWidget {
   final Function total;
-  TableSection(this.total);
+  final List<ItemData> tableitem;
+  TableSection(this.total,this.tableitem);
   @override
   _TableSectionState createState() => _TableSectionState();
 }
@@ -117,6 +119,7 @@ class _TableSectionState extends State<TableSection> {
                 _qtyCount,
                 _priceitem,
                 _amount,
+                widget.tableitem,
               ),
             ),
           ),

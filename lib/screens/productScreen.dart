@@ -14,6 +14,7 @@ class ProductScreen extends StatelessWidget {
           'Products',
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
+        centerTitle: true,
         actions: [
           IconButton(
               icon: Icon(Icons.add_shopping_cart_outlined),
