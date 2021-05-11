@@ -37,6 +37,8 @@ class Item with ChangeNotifier {
 
   notifyListeners();
 
+
+// Farook: Use list.fold method below to find the sum
   double get totalAmount {
     final list = _items.map((e) => e.lineamt).toList();
     list.forEach((item) {
