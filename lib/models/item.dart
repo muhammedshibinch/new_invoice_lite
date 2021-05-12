@@ -32,8 +32,6 @@ class Item with ChangeNotifier {
 
   notifyListeners();
 
-<<<<<<< HEAD
-=======
 
 // Farook: Use list.fold method below to find the sum
   double get totalAmount {
@@ -43,5 +41,4 @@ class Item with ChangeNotifier {
     });
     return total;
   }
->>>>>>> 022d4ee03245468c9a5a1099aaf0cd3e33a9fe13
 }
