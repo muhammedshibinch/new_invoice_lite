@@ -23,9 +23,6 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(
           value: Data(),
         ),
-        ChangeNotifierProvider.value(
-          value: Item(),
-        ),
         ChangeNotifierProvider.value(value: InvoiceItem())
       ],
       child: MaterialApp(
