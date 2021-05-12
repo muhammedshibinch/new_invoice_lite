@@ -2,7 +2,6 @@ import 'customer.dart';
 import 'package:flutter/foundation.dart';
 import 'item.dart';
 import 'product.dart';
-import 'package:intl/intl.dart';
 
 class Invoice {
   final String id;

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'product.dart';
 
 class ItemData {
-  final Product product;
+   final Product product;
   final int itemqty;
   final double itemprice;
   final double lineamt;
@@ -21,12 +21,7 @@ class Item with ChangeNotifier {
   }
 
   void addItem(Product ourproduct, int qty, double price, double lineamount) {
-    // double amt;
-    // if(qty==null){
-    //   amt=price * double.parse(qty);
-    // }else{
-    //   amt= price * qty;
-    // }
+    
     final newitem = ItemData(
         product: ourproduct,
         itemqty: qty,
@@ -37,11 +32,4 @@ class Item with ChangeNotifier {
 
   notifyListeners();
 
-  double get totalAmount {
-    final list = _items.map((e) => e.lineamt).toList();
-    list.forEach((item) {
-      total = total + item;
-    });
-    return total;
-  }
 }
