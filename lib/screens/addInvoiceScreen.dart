@@ -87,7 +87,7 @@ class _InvoiceEntryState extends State<InvoiceEntry> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-//Container which wrap the Row which contain both Invoice Number Section and Date Section.                    
+//Container which wrap the Row which contain both Invoice Number Section and Date Section.
                     Container(
                       padding: EdgeInsets.only(bottom: 25),
                       child: Row(
@@ -96,8 +96,10 @@ class _InvoiceEntryState extends State<InvoiceEntry> {
 //Invoive Number Section
                           InvoiceNumberSection(
                             labelStyle: labelStyle,
-                            onSaved: (value) {
-                              invoiceNum = int.parse(value);
+                            onChanged: (value) {
+                              setState(() {
+                                invoiceNum = int.parse(value);
+                              });
                             },
                           ),
 //Date Selection
@@ -117,7 +119,7 @@ class _InvoiceEntryState extends State<InvoiceEntry> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-//Customer Name Section        
+//Customer Name Section
                           CustomerNameSection(
                             nameController: _nameController,
                             custName: custName,
@@ -129,8 +131,9 @@ class _InvoiceEntryState extends State<InvoiceEntry> {
                           ),
 //Customer Address
                           CustomerAddressSection(
-                              addressController: addressController,
-                              labelStyle: labelStyle),
+                            addressController: addressController,
+                            labelStyle: labelStyle,
+                          ),
                         ],
                       ),
                     ),
@@ -138,18 +141,19 @@ class _InvoiceEntryState extends State<InvoiceEntry> {
                     TableSection(_total, tableitem),
 
                     SizedBox(width: 20),
-//Total Amount Section 
+//Total Amount Section
                     TotalAmountSection(
                         totalController: totalController,
                         labelStyle: labelStyle),
-//Save Button Section      
+//Save Button Section
                     SaveButtonSection(
-                        tableitem: tableitem,
-                        formKey: formKey,
-                        invoiceNum: invoiceNum,
-                        dateSelected: _dateSelected,
-                        customers: customers,
-                        totalController: totalController),
+                      tableitem: tableitem,
+                      formKey: formKey,
+                      invoiceNum: invoiceNum,
+                      dateSelected: _dateSelected,
+                      customers: customers,
+                      totalController: totalController,
+                    ),
                   ],
                 ),
               ),
@@ -161,74 +165,167 @@ class _InvoiceEntryState extends State<InvoiceEntry> {
   }
 }
 
-
 InputBorder _outlinedInputBorder(double width, Color color) =>
-      OutlineInputBorder(
-        borderSide: BorderSide(width: width, color: color),
-        borderRadius: BorderRadius.circular(15),
+    OutlineInputBorder(
+      borderSide: BorderSide(width: width, color: color),
+      borderRadius: BorderRadius.circular(15),
+    );
+InputDecoration _decoration(String text, BuildContext context) {
+  return InputDecoration(
+      labelText: text,
+      helperText: ' ',
+      labelStyle: TextStyle(
+          fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor),
+      focusedBorder: _outlinedInputBorder(3, Colors.black),
+      enabledBorder: _outlinedInputBorder(1, Colors.grey),
+      errorBorder: _outlinedInputBorder(3, Colors.red),
+      focusedErrorBorder: _outlinedInputBorder(3, Colors.red),
+      disabledBorder: _outlinedInputBorder(1, Colors.grey),
       );
-  InputDecoration _decoration(String text) {
-    return InputDecoration(
-        labelText: text,
-        focusedBorder: _outlinedInputBorder(3, Colors.black),
-        enabledBorder: _outlinedInputBorder(1, Colors.grey),
-        errorBorder: _outlinedInputBorder(3, Colors.red),
-        focusedErrorBorder: _outlinedInputBorder(3, Colors.red),
-        disabledBorder: _outlinedInputBorder(1, Colors.grey));
-  }
-class SaveButtonSection extends StatelessWidget {
-  const SaveButtonSection({
-    Key key,
-    @required this.tableitem,
-    @required this.formKey,
-    @required this.invoiceNum,
-    @required String dateSelected,
-    @required this.customers,
-    @required this.totalController,
-  })  : _dateSelected = dateSelected,
-        super(key: key);
+}
 
-  final List<ItemData> tableitem;
-  final GlobalKey<FormState> formKey;
-  final int invoiceNum;
-  final String _dateSelected;
-  final Customer customers;
-  final TextEditingController totalController;
+class InvoiceNumberSection extends StatelessWidget {
+  const InvoiceNumberSection({
+    Key key,
+    @required this.labelStyle,
+    @required this.onChanged,
+  }) : super(key: key);
+
+  final TextStyle labelStyle;
+  final Function onChanged;
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: ElevatedButton.icon(
-          onPressed: () {
-            print(tableitem.map((e) => e.itemqty).toList());
-            final isValid = formKey.currentState.validate();
-            if (isValid) {
-              formKey.currentState.save();
-              //  final message = '$date\n$invoicenum\n$customerName';
-              //   //  print(message);
-              //   print(invoice.map((e) => e.invdate).toList());
-              //   print(invoice.map((e) => e.customer).toList());
-              //   print(invoice.length);
-              //   print(invoice.map((e) => e.invno).toList());
-              //   print(invoice.map((e) => e.itemlist).toList());
-              //   print(invoice.map((e) => e.totalamount).toList());
-              Provider.of<InvoiceItem>(context, listen: false).addInvoice(
-                  invoiceNum,
-                  _dateSelected,
-                  customers,
-                  double.parse(totalController.text),
-                  tableitem.toList());
-            }
-            Navigator.of(context).pushReplacementNamed(InvoiceScreen.routeName);
-          },
-          icon: Icon(Icons.save),
-          style: ElevatedButton.styleFrom(
-            padding: EdgeInsets.symmetric(vertical: 15, horizontal: 70),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(25),
-            ),
-          ),
-          label: Text('SAVE')),
+    return Container(
+      width: MediaQuery.of(context).size.width * .4,
+      height: 65,
+      child: TextFormField(
+       autovalidateMode: AutovalidateMode.onUserInteraction,
+        validator: (value) {
+          if (value.isEmpty) {
+            return 'Enter a Invoice Number';
+          }
+          return null;
+        },
+        textAlign: TextAlign.center,
+        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        decoration: _decoration('Invoice Number', context),
+        keyboardType: TextInputType.number,
+        onChanged: onChanged,
+      ),
+    );
+  }
+}
+
+class DateSelectionSection extends StatelessWidget {
+  const DateSelectionSection({
+    Key key,
+    @required String dateSelected,
+    @required this.dateController,
+    @required this.labelStyle,
+    @required this.onTap,
+  })  : _dateSelected = dateSelected,
+        super(key: key);
+
+  final String _dateSelected;
+  final TextEditingController dateController;
+  final TextStyle labelStyle;
+  final Function onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width * .4,
+      height: 65,
+      child: TextFormField(
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        validator: (value) {
+          if (value.isEmpty) {
+            return 'Select a date';
+          }
+          return null;
+        },
+        onTap: onTap,
+        enabled: _dateSelected == null ? true : false,
+        controller: dateController,
+        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        textAlign: TextAlign.center,
+        decoration: _decoration('Date', context),
+      ),
+    );
+  }
+}
+
+class CustomerNameSection extends StatelessWidget {
+  const CustomerNameSection({
+    Key key,
+    @required String nameController,
+    @required this.custName,
+    @required this.onChanged,
+  })  : _nameController = nameController,
+        super(key: key);
+
+  final String _nameController;
+  final List<String> custName;
+  final Function onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return  Container(
+        width: MediaQuery.of(context).size.width * .4,
+        height: 75,
+        child:
+            DropdownButtonFormField(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          isDense: true,
+          isExpanded: true,
+          items: custName
+                .map(
+                  (label) => DropdownMenuItem(
+                                      child: Text(
+                        label.toString(),
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(fontWeight: FontWeight.bold,fontSize: 13),
+                      ),
+                    
+                    value: label,
+                  ),
+                )
+                .toList(),
+          validator: (value) => value == null ? 'Please select a customer' : null,
+          decoration: _decoration('Customer Name', context),
+          value: _nameController,
+          onChanged: onChanged,
+        ),
+    );
+  }
+}
+
+class CustomerAddressSection extends StatelessWidget {
+  const CustomerAddressSection({
+    Key key,
+    @required this.addressController,
+    @required this.labelStyle,
+  }) : super(key: key);
+
+  final TextEditingController addressController;
+  final TextStyle labelStyle;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width * .4,
+      child: Center(
+        child: TextFormField(
+          autovalidateMode: AutovalidateMode.always,
+          enabled: false,
+          maxLines: 2,
+          controller: addressController,
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          textAlign: TextAlign.center,
+          decoration: _decoration('Address', context),
+        ),
+      ),
     );
   }
 }
@@ -276,179 +373,52 @@ class TotalAmountSection extends StatelessWidget {
   }
 }
 
-class InvoiceNumberSection extends StatelessWidget {
-  const InvoiceNumberSection({
+class SaveButtonSection extends StatelessWidget {
+  const SaveButtonSection({
     Key key,
-    @required this.labelStyle,
-    @required this.onSaved,
-  }) : super(key: key);
-
-  final TextStyle labelStyle;
-  final Function onSaved;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 150,
-      height: 40,
-      child: TextFormField(
-        validator: (value) {
-          if (value.isEmpty) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text('Enter a Invoice Number'),
-              backgroundColor: Theme.of(context).errorColor,
-            ));
-          }
-          return null;
-        },
-        textAlign: TextAlign.center,
-        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        decoration: _decoration('Invoice Number'),
-        keyboardType: TextInputType.number,
-        onSaved: onSaved,
-      ),
-    );
-  }
-}
-
-class DateSelectionSection extends StatelessWidget {
-  const DateSelectionSection({
-    Key key,
+    @required this.tableitem,
+    @required this.formKey,
+    @required this.invoiceNum,
     @required String dateSelected,
-    @required this.dateController,
-    @required this.labelStyle,
-    @required this.onTap,
+    @required this.customers,
+    @required this.totalController,
   })  : _dateSelected = dateSelected,
         super(key: key);
 
+  final List<ItemData> tableitem;
+  final GlobalKey<FormState> formKey;
+  final int invoiceNum;
   final String _dateSelected;
-  final TextEditingController dateController;
-  final TextStyle labelStyle;
-  final Function onTap;
-
+  final Customer customers;
+  final TextEditingController totalController;
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 150,
-      height: 40,
-      child: TextFormField(
-        validator: (value) {
-          if (value.isEmpty) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text('Select a date'),
-              backgroundColor: Theme.of(context).errorColor,
-            ));
-          }
-          return null;
-        },
-        onTap: onTap,
-        enabled: _dateSelected == null ? true : false,
-        controller: dateController,
-        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-        textAlign: TextAlign.center,
-        decoration: _decoration('Date'),
-      ),
-    );
-  }
-}
+    return Center(
+      child: ElevatedButton.icon(
+          onPressed: () {
+            final isValid = formKey.currentState.validate();
+            if (!isValid) {
+              return null;
+            } else {
+              formKey.currentState.save();
+              Provider.of<InvoiceItem>(context, listen: false).addInvoice(
+                  invoiceNum,
+                  _dateSelected,
+                  customers,
+                  double.parse(totalController.text),
+                  tableitem.toList());
+            }
 
-class CustomerAddressSection extends StatelessWidget {
-  const CustomerAddressSection({
-    Key key,
-    @required this.addressController,
-    @required this.labelStyle,
-  }) : super(key: key);
-
-  final TextEditingController addressController;
-  final TextStyle labelStyle;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 200,
-      child: Center(
-        child: TextFormField(
-          enabled: false,
-          maxLines: 2,
-          controller: addressController,
-          textAlign: TextAlign.center,
-          decoration: InputDecoration(
-              disabledBorder: _outlinedInputBorder(1,Colors.grey),
-              labelText: 'Address',
-              labelStyle: labelStyle),
-
-          // ? 'Customer Address'
-          // : custAddress,
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-      ),
-    );
-  }
-}
-
-class CustomerNameSection extends StatelessWidget {
-  const CustomerNameSection({
-    Key key,
-    @required String nameController,
-    @required this.custName,
-    @required this.onChanged,
-  })  : _nameController = nameController,
-        super(key: key);
-
-  final String _nameController;
-  final List<String> custName;
-  final Function onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 150,
-      height: 45,
-      child: FormField(onSaved: (value) {
-        // setState(() {
-        //   // widget.custName(value);
-        //   // widget.custm(customers);
-        // });
-      }, builder: (_) {
-        return InputDecorator(
-          decoration: InputDecoration(
-            labelText: 'CustomerName',
-            labelStyle: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).primaryColor),
-            contentPadding: EdgeInsets.fromLTRB(5.0, 3.0, 3.0, 1.0),
-            border: OutlineInputBorder(
-              borderSide: BorderSide(width: 2),
-              borderRadius: BorderRadius.circular(15.0),
+            Navigator.of(context).pushReplacementNamed(InvoiceScreen.routeName);
+          },
+          icon: Icon(Icons.save),
+          style: ElevatedButton.styleFrom(
+            padding: EdgeInsets.symmetric(vertical: 15, horizontal: 70),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(25),
             ),
           ),
-          child: DropdownButtonFormField(
-            validator: (value) {
-              if (value == null) {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text('Select Customer name'),
-                  backgroundColor: Theme.of(context).errorColor,
-                ));
-              }
-              return null;
-            },
-            decoration: InputDecoration(border: InputBorder.none),
-            value: _nameController,
-            items: custName
-                .map((label) => DropdownMenuItem(
-                      child: Text(
-                        label.toString(),
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      value: label,
-                    ))
-                .toList(),
-            hint: Text('Customer Name'),
-            onChanged: onChanged,
-          ),
-        );
-      }),
+          label: Text('SAVE')),
     );
   }
 }

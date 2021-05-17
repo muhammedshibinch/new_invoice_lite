@@ -80,39 +80,9 @@ class _NewLineState extends State<NewLine> {
   int qty = 0;
   Product product;
 
-  // double get _amounts{
-  //   double totalsum;
-  //    if(qty!=0){
-  //      totalsum = amount;
-  //    }else{
-  //      totalsum=0.0;
-  //    }
-  //    return totalsum;
-  // }
-
-  //final qtyCountroller = TextEditingController();
-  // @override
-  // void didChangeDependencies() {
-    
-  //    final property = ItemData(
-  //  product: Product(itemid: 3,itemname: 'sdgsdh',itemprice: 354354,openingqty: 242), 
-  //  itemqty: quantity, 
-  //  itemprice: itemprice, 
-  //  lineamt: totalprice
-  //  );
-  //  widget.tableitem.add(property);
-  //   super.didChangeDependencies();
-  // }
- 
   @override
   Widget build(BuildContext context) {
-    // if(getTotalAmount()!=0||price != null){
-    //    print(getTotalAmount());
-    // }else{
-    //     print(0.0);
-    // }
-  
-
+    
     final amountcontroller =
         TextEditingController(text: getTotalAmount().toString());
     final media = MediaQuery.of(context).size;
@@ -201,9 +171,10 @@ class _NewLineState extends State<NewLine> {
             keyboardType: TextInputType.number,
             onChanged: (value) {
               setState(() {
-                qty = int.parse(value);
+                qty = int.parse(value,onError: (source) => 0);
                 widget.giveTotal(getTotalAmount());
-              });
+              }
+              );
               // widget.giveTotal(getTotalAmount());
               //amount = double.parse(value) * price;
               //  print(amount);
