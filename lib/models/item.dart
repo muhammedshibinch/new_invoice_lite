@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'product.dart';
 
 class ItemData {
-   final Product product;
+  final Product product;
   final int itemqty;
   final double itemprice;
   final double lineamt;
@@ -12,4 +12,3 @@ class ItemData {
       @required this.itemprice,
       @required this.lineamt});
 }
-

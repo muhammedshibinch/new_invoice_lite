@@ -4,9 +4,14 @@ import 'package:invoice_lite_flutterv1/screens/addInvoiceScreen.dart';
 import 'package:invoice_lite_flutterv1/widgets/drawer.dart';
 import 'package:provider/provider.dart';
 
-
-class InvoiceScreen extends StatelessWidget {
+class InvoiceScreen extends StatefulWidget {
   static const routeName = '/invoiceScreen';
+
+  @override
+  _InvoiceScreenState createState() => _InvoiceScreenState();
+}
+
+class _InvoiceScreenState extends State<InvoiceScreen> {
   @override
   Widget build(BuildContext context) {
     final invoiceList =
@@ -18,11 +23,10 @@ class InvoiceScreen extends StatelessWidget {
         child: CustomDrawer(),
       ),
       appBar: AppBar(
-        
         title: Text('Invoices'),
-        centerTitle:true,
+        centerTitle: true,
         shape: RoundedRectangleBorder(
-          borderRadius:BorderRadius.vertical(bottom: Radius.circular(10))),
+            borderRadius: BorderRadius.vertical(bottom: Radius.circular(10))),
         actions: [
           IconButton(
               icon: Icon(Icons.note_add_outlined),
@@ -57,6 +61,7 @@ class InvoiceScreen extends StatelessWidget {
             child: Container(
               padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Center(
                     child: Text(
@@ -111,13 +116,39 @@ class InvoiceScreen extends StatelessWidget {
                       )
                     ],
                   ),
-                  Row(
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text('Item Purchased : '),
-                      ...invoiceList[index].itemlist.map((e) => Text(
-                            '${e.product.itemname}, ',
-                            style: style,
-                          ))
+                      Container(
+                        height: 100,
+                        child: GridView(
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            childAspectRatio: 4 / 1,
+                            crossAxisCount: 3,
+                            //crossAxisSpacing: 10,
+                            //mainAxisExtent: 2,
+                            //mainAxisSpacing: 10,
+                          ),
+                          children: invoiceList[index]
+                              .itemlist
+                              .map(
+                                (e) => Card(
+                                  margin: EdgeInsets.all(5),
+                                  elevation: 5,
+                                  child: Container(
+                                    padding: EdgeInsets.only(left: 5),
+                                    child: Text(
+                                      '${e.product.itemname}',
+                                      style: style,
+                                    ),
+                                  ),
+                                ),
+                              )
+                              .toList(),
+                        ),
+                      ),
                     ],
                   ),
                   Row(

@@ -21,36 +21,54 @@ class Invoice {
 
 class InvoiceItem with ChangeNotifier {
   List<Invoice> _invoice = [
-    Invoice(
-        id: DateTime.now().toString(),
-        invno: 1,
-        invdate: '2021-04-19',
-        customer: Customer(
-            custid: 1,
-            custname: 'Alex Jones',
-            openingbal: 120000,
-            custaddress: 'PO BOX 804'),
-        totalamount: 120000,
-        itemlist: [
-          ItemData(
-              product: Product(
-                  itemid: 1,
-                  itemname: 'Lenovo Laptop',
-                  itemprice: 40000,
-                  openingqty: 10),
-              itemqty: 3,
-              itemprice: 40000,
-              lineamt: 120000),
-          ItemData(
-              product: Product(
-                  itemid: 2,
-                  itemname: 'iPhone 6',
-                  itemprice: 40000,
-                  openingqty: 10),
-              itemqty: 3,
-              itemprice: 40000,
-              lineamt: 120000),
-        ]),
+    // Invoice(
+    //     id: DateTime.now().toString(),
+    //     invno: 1,
+    //     invdate: '2021-04-19',
+    //     customer: Customer(
+    //         custid: 1,
+    //         custname: 'Alex Jones',
+    //         openingbal: 120000,
+    //         custaddress: 'PO BOX 804'),
+    //     totalamount: 120000,
+    //     itemlist: [
+    //       ItemData(
+    //           product: Product(
+    //               itemid: 1,
+    //               itemname: 'Lenovo Laptop',
+    //               itemprice: 40000,
+    //               openingqty: 10),
+    //           itemqty: 3,
+    //           itemprice: 40000,
+    //           lineamt: 120000),
+    //       ItemData(
+    //           product: Product(
+    //               itemid: 2,
+    //               itemname: 'iPhone 6',
+    //               itemprice: 40000,
+    //               openingqty: 10),
+    //           itemqty: 3,
+    //           itemprice: 40000,
+    //           lineamt: 120000),
+    //       ItemData(
+    //           product: Product(
+    //               itemid: 2,
+    //               itemname: 'iPhone 6',
+    //               itemprice: 40000,
+    //               openingqty: 10),
+    //           itemqty: 3,
+    //           itemprice: 40000,
+    //           lineamt: 120000),
+    //       ItemData(
+    //           product: Product(
+    //               itemid: 2,
+    //               itemname: 'iPhone 6',
+    //               itemprice: 40000,
+    //               openingqty: 10),
+    //           itemqty: 3,
+    //           itemprice: 40000,
+    //           lineamt: 120000),
+    //     ]),
   ];
   List<Invoice> get invoice {
     return [..._invoice];

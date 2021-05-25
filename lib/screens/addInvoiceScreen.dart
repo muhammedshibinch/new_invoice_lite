@@ -83,7 +83,7 @@ class _InvoiceEntryState extends State<InvoiceEntry> {
             key: formKey,
             child: SingleChildScrollView(
               child: Container(
-                height: MediaQuery.of(context).size.height * .8,
+                height: MediaQuery.of(context).size.height * .82,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -172,16 +172,16 @@ InputBorder _outlinedInputBorder(double width, Color color) =>
     );
 InputDecoration _decoration(String text, BuildContext context) {
   return InputDecoration(
-      labelText: text,
-      helperText: ' ',
-      labelStyle: TextStyle(
-          fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor),
-      focusedBorder: _outlinedInputBorder(3, Colors.black),
-      enabledBorder: _outlinedInputBorder(1, Colors.grey),
-      errorBorder: _outlinedInputBorder(3, Colors.red),
-      focusedErrorBorder: _outlinedInputBorder(3, Colors.red),
-      disabledBorder: _outlinedInputBorder(1, Colors.grey),
-      );
+    labelText: text,
+    helperText: ' ',
+    labelStyle: TextStyle(
+        fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor),
+    focusedBorder: _outlinedInputBorder(3, Colors.black),
+    enabledBorder: _outlinedInputBorder(1, Colors.grey),
+    errorBorder: _outlinedInputBorder(3, Colors.red),
+    focusedErrorBorder: _outlinedInputBorder(3, Colors.red),
+    disabledBorder: _outlinedInputBorder(1, Colors.grey),
+  );
 }
 
 class InvoiceNumberSection extends StatelessWidget {
@@ -200,7 +200,7 @@ class InvoiceNumberSection extends StatelessWidget {
       width: MediaQuery.of(context).size.width * .4,
       height: 65,
       child: TextFormField(
-       autovalidateMode: AutovalidateMode.onUserInteraction,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
         validator: (value) {
           if (value.isEmpty) {
             return 'Enter a Invoice Number';
@@ -271,32 +271,30 @@ class CustomerNameSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  Container(
-        width: MediaQuery.of(context).size.width * .4,
-        height: 75,
-        child:
-            DropdownButtonFormField(
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          isDense: true,
-          isExpanded: true,
-          items: custName
-                .map(
-                  (label) => DropdownMenuItem(
-                                      child: Text(
-                        label.toString(),
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(fontWeight: FontWeight.bold,fontSize: 13),
-                      ),
-                    
-                    value: label,
-                  ),
-                )
-                .toList(),
-          validator: (value) => value == null ? 'Please select a customer' : null,
-          decoration: _decoration('Customer Name', context),
-          value: _nameController,
-          onChanged: onChanged,
-        ),
+    return Container(
+      width: MediaQuery.of(context).size.width * .4,
+      height: 75,
+      child: DropdownButtonFormField(
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        isDense: true,
+        isExpanded: true,
+        items: custName
+            .map(
+              (label) => DropdownMenuItem(
+                child: Text(
+                  label.toString(),
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                ),
+                value: label,
+              ),
+            )
+            .toList(),
+        validator: (value) => value == null ? 'Please select a customer' : null,
+        decoration: _decoration('Customer Name', context),
+        value: _nameController,
+        onChanged: onChanged,
+      ),
     );
   }
 }
@@ -408,7 +406,10 @@ class SaveButtonSection extends StatelessWidget {
                   double.parse(totalController.text),
                   tableitem.toList());
             }
-
+            print(tableitem.map((e) => e.itemprice).toList());
+            print(tableitem.map((e) => e.itemqty).toList());
+            print(tableitem.map((e) => e.lineamt).toList());
+            print(tableitem.map((e) => e.product.itemname).toList());
             Navigator.of(context).pushReplacementNamed(InvoiceScreen.routeName);
           },
           icon: Icon(Icons.save),
